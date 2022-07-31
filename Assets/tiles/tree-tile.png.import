@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/cafe-late-overworld-steep-angle.png-7fe5f0a86aab74e1dd07fa1ea998d7e4.stex"
+path="res://.import/tree-tile.png-bf884bf1cec33218de358add642c2040.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/cafe-late-overworld-steep-angle.png"
-dest_files=[ "res://.import/cafe-late-overworld-steep-angle.png-7fe5f0a86aab74e1dd07fa1ea998d7e4.stex" ]
+source_file="res://Assets/tiles/tree-tile.png"
+dest_files=[ "res://.import/tree-tile.png-bf884bf1cec33218de358add642c2040.stex" ]
 
 [params]
 
@@ -32,4 +32,4 @@ process/normal_map_invert_y=false
 stream=false
 size_limit=0
 detect_3d=false
-svg/scale=100.0
+svg/scale=1.0
