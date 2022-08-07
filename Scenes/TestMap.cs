@@ -60,7 +60,6 @@ public class TestMap : LevelMap
         _characterMatrix = new Character[(int)rect.End.x, (int)rect.End.y];
         
         _cursor.Position = _cursorPosition;
-        AddChild(_cursor);
         var playerOneConfig = new CursorConfig
         {
             PlayerNumber = 1
@@ -117,6 +116,7 @@ public class TestMap : LevelMap
 
     public override void ReceiveInput(Direction direction)
     {
+        
         Vector2 position;
 
         if (direction == Direction.Up)
@@ -155,6 +155,8 @@ public class TestMap : LevelMap
         {
             return;
         }
+        
+        PlayerDeSelected();
 
         var cursorIndex = new Vector2((position.x - _tileMap.CellSize.x / 2) / 16,
             (position.y - _tileMap.CellSize.x / 2) / 16);
@@ -186,7 +188,20 @@ public class TestMap : LevelMap
 
     }
 
-    public void PlayerSelected(Character character, Vector2 characterPosition)
+    private void PlayerDeSelected()
+    {
+        var rect = _selectMap.GetUsedRect();
+        
+        for (int y = 0; y < rect.End.y; y++)
+        {
+            for (int x = 0; x < rect.End.x; x++)
+            {
+                _selectMap.SetCell(x, y, -1);
+            }
+        }
+    }
+
+    private void PlayerSelected(Character character, Vector2 characterPosition)
     {
         Queue<Thing> queue = new Queue<Thing>();
 
@@ -195,6 +210,14 @@ public class TestMap : LevelMap
             Position = characterPosition,
             StepsRemaining = character.GetCharacterStats().Move
         });
+
+        int[][] directions =
+        {
+            new[] { 0, 1 },
+            new[] { 0, -1 },
+            new[] { 1, 0 },
+            new[] { -1, 0 }
+        };
         
         GD.Print(queue);
 
@@ -207,6 +230,31 @@ public class TestMap : LevelMap
 
             if (stepsRemaining > 0)
             {
+                foreach (var direction in directions)
+                {
+                    var newX = (int)thing.Position.x + direction[0];
+                    var newY = (int)thing.Position.y + direction[1];
+                    
+                    GD.Print(newX, " ,",newY);
+                    
+                    GD.Print(_selectMap.GetCell(newX, newY) , _featureMap.GetCell(newX, newY));
+                    
+                    if (newX >= 0
+                        && newY >= 0
+                        && newX < _inboundMatrix.GetLength(0)
+                        && newY < _inboundMatrix.GetLength(1)
+                        && _inboundMatrix[newX, newY] == 1 
+                        && _selectMap.GetCell(newX, newY) == -1 
+                        && _featureMap.GetCell(newX, newY) == -1)
+                    {
+                        queue.Enqueue(new Thing()
+                        {
+                            Position = new Vector2(newX, newY),
+                            StepsRemaining = stepsRemaining
+                        });
+                    }
+                    
+                }
             }
 
         }

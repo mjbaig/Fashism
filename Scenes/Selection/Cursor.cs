@@ -34,37 +34,28 @@ public class Cursor : KinematicBody2D
 
     private bool _isMovementReady = true;
 
-    private Timer _movementDelay;
-
     public override async void _Ready()
     {
         _animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
-
-        await ToSignal(GetTree().CreateTimer(1), "timeout");
-        _animationPlayer.Play("Idle");
-
-        _movementDelay = GetNode<Timer>("MovementDelay");
     }
 
     public override void _Process(float delta)
     {
-
         _clock += delta;
-        
+
         if (!_isConfigured)
         {
             GD.PrintErr("cursor has no configuration");
             return;
         }
-        
+
         HandleAcceptInput();
-        
-        if (Math.Abs(_lastInputTime - _clock) > 0.1f)
+
+        if (Math.Abs(_lastInputTime - _clock) > 0.05f)
         {
             HandleMovementInput();
             _lastInputTime = _clock;
         }
-        
     }
 
     private void HandleAcceptInput()
@@ -81,7 +72,7 @@ public class Cursor : KinematicBody2D
     private void HandleMovementInput()
     {
         Direction direction;
-        
+
         if (Input.IsActionPressed(_up) && Input.IsActionPressed(_right))
         {
             direction = Direction.UpRight;

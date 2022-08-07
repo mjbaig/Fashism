@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Assets/tiles/tilemap/TestMapFeatures.tres" type="TileSet" id=1]
 [ext_resource path="res://Scenes/TestMap.cs" type="Script" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Scenes/Selection/Cursor.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Assets/movement-range.png" type="Texture" id=5]
 [ext_resource path="res://Assets/attack-range.png" type="Texture" id=6]
+[ext_resource path="res://Assets/Music/TestMap/The Edge of Dawn [8-Bit; VRC6] - Fire Emblem Three Houses.mp3" type="AudioStream" id=7]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 16, 16, 0, 16, 0, 0, 16, 0 )
@@ -86,6 +87,7 @@ position = Vector2( 8, 8 )
 
 [node name="Camera2D" type="Camera2D" parent="Cursor"]
 position = Vector2( 112, 72 )
+offset = Vector2( -20, -20 )
 current = true
 zoom = Vector2( 2, 2 )
 drag_margin_h_enabled = true
@@ -95,3 +97,7 @@ drag_margin_left = 0.5
 drag_margin_top = 0.5
 drag_margin_right = 0.5
 drag_margin_bottom = 0.5
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+autoplay = true
