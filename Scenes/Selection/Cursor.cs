@@ -50,6 +50,7 @@ public class Cursor : KinematicBody2D
         }
 
         HandleAcceptInput();
+        HandleCancelInput();
 
         if (Math.Abs(_lastInputTime - _clock) > 0.05f)
         {
@@ -65,6 +66,17 @@ public class Cursor : KinematicBody2D
             foreach (var levelMap in _levelMaps)
             {
                 levelMap.TileSelected(_playerNumber);
+            }
+        }
+    }
+
+    private void HandleCancelInput()
+    {
+        if (Input.IsActionJustPressed("ui_cancel"))
+        {
+            foreach (var levelMap in _levelMaps)
+            {
+                levelMap.Deselect();
             }
         }
     }

@@ -6,6 +6,8 @@ namespace Fashism.Scenes
     {
         public abstract void ReceiveInput(Direction direction);
         public abstract void TileSelected(int PlayerNumber);
+
+        public abstract void Deselect();
     }
     
     public enum Direction

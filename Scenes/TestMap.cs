@@ -30,6 +30,8 @@ public class TestMap : LevelMap
     private Character[,] _characterMatrix;
 
     private Vector2 _cursorIndex = new Vector2(0, 0);
+
+    private Boolean _isSomethingSelected;
     
     public override void _Ready()
     {
@@ -153,8 +155,6 @@ public class TestMap : LevelMap
         {
             return;
         }
-        
-        PlayerDeSelected();
 
         var cursorIndex = new Vector2((position.x - _groundMap.CellSize.x / 2) / 16,
             (position.y - _groundMap.CellSize.x / 2) / 16);
@@ -182,11 +182,12 @@ public class TestMap : LevelMap
             var name = _characterMatrix[(int)_cursorIndex.x, (int)_cursorIndex.y].Name;
             GD.Print("Clicked on Character " + name);
             PlayerSelected(_characterMatrix[(int)_cursorIndex.x, (int)_cursorIndex.y], _cursorIndex);
+            _isSomethingSelected = true;
         }
 
     }
 
-    private void PlayerDeSelected()
+    public override void Deselect()
     {
         var rect = _selectMap.GetUsedRect();
         
@@ -197,6 +198,8 @@ public class TestMap : LevelMap
                 _selectMap.SetCell(x, y, -1);
             }
         }
+
+        _isSomethingSelected = false;
     }
 
     private void PlayerSelected(Character character, Vector2 characterPosition)
