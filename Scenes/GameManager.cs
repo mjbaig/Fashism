@@ -6,6 +6,8 @@ public class GameManager : Node2D
     
     public override void _Ready()
     {
+        
+        
 
         GetTree().ChangeScene("res://Scenes/TestMap.tscn");
 

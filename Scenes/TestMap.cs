@@ -17,7 +17,7 @@ public class TestMap : LevelMap
 
     private Cursor _cursor;
 
-    private TileMap _tileMap;
+    private TileMap _groundMap;
 
     private TileMap _selectMap;
 
@@ -34,17 +34,15 @@ public class TestMap : LevelMap
     public override void _Ready()
     {
         
-        _tileMap = GetNode<TileMap>("Ground");
+        _groundMap = GetNode<TileMap>("Ground");
 
         _featureMap = GetNode<TileMap>("Features");
 
         _selectMap = GetNode<TileMap>("Selected");
         
         _cursor = GetNode<Cursor>("Cursor");
-
-        _cursor._Ready();
         
-        var rect = _tileMap.GetUsedRect();
+        var rect = _groundMap.GetUsedRect();
         
         _inboundMatrix = new int[(int)rect.End.x , (int)rect.End.y];
         
@@ -52,7 +50,7 @@ public class TestMap : LevelMap
         {
             for (int x = 0; x < rect.End.x; x++)
             {
-                _inboundMatrix[x, y] = _tileMap.GetCell(x, y);
+                _inboundMatrix[x, y] = _groundMap.GetCell(x, y);
                 
             }
         }
@@ -98,8 +96,8 @@ public class TestMap : LevelMap
 
     private Vector2 _CoordinatesToPosition(float x, float y)
     {
-        return new Vector2(x * _tileMap.CellSize.x + _tileMap.CellSize.x / 2,
-            y * _tileMap.CellSize.x + _tileMap.CellSize.x / 2 );
+        return new Vector2(x * _groundMap.CellSize.x + _groundMap.CellSize.x / 2,
+            y * _groundMap.CellSize.x + _groundMap.CellSize.x / 2 );
     }
 
 //  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -121,35 +119,35 @@ public class TestMap : LevelMap
 
         if (direction == Direction.Up)
         {
-            position = new Vector2(_cursor.Position.x, _cursor.Position.y - _tileMap.CellSize.x);
+            position = new Vector2(_cursor.Position.x, _cursor.Position.y - _groundMap.CellSize.x);
         }
         else if (direction == Direction.Down)
         {
-            position = new Vector2(_cursor.Position.x, _cursor.Position.y + _tileMap.CellSize.x);
+            position = new Vector2(_cursor.Position.x, _cursor.Position.y + _groundMap.CellSize.x);
         }
         else if (direction == Direction.Left)
         {
-            position = new Vector2(_cursor.Position.x - _tileMap.CellSize.x, _cursor.Position.y);
+            position = new Vector2(_cursor.Position.x - _groundMap.CellSize.x, _cursor.Position.y);
         }
         else if (direction == Direction.Right)
         {
-            position = new Vector2(_cursor.Position.x + _tileMap.CellSize.x, _cursor.Position.y);
+            position = new Vector2(_cursor.Position.x + _groundMap.CellSize.x, _cursor.Position.y);
         }
         else if (direction == Direction.UpLeft)
         {
-            position = new Vector2(_cursor.Position.x - _tileMap.CellSize.x, _cursor.Position.y - _tileMap.CellSize.x);
+            position = new Vector2(_cursor.Position.x - _groundMap.CellSize.x, _cursor.Position.y - _groundMap.CellSize.x);
         }
         else if (direction == Direction.UpRight)
         {
-            position = new Vector2(_cursor.Position.x + _tileMap.CellSize.x, _cursor.Position.y - _tileMap.CellSize.x);
+            position = new Vector2(_cursor.Position.x + _groundMap.CellSize.x, _cursor.Position.y - _groundMap.CellSize.x);
         }
         else if (direction == Direction.DownLeft)
         {
-            position = new Vector2(_cursor.Position.x - _tileMap.CellSize.x, _cursor.Position.y + _tileMap.CellSize.x);
+            position = new Vector2(_cursor.Position.x - _groundMap.CellSize.x, _cursor.Position.y + _groundMap.CellSize.x);
         }
         else if (direction == Direction.DownRight)
         {
-            position = new Vector2(_cursor.Position.x + _tileMap.CellSize.x, _cursor.Position.y + _tileMap.CellSize.x);
+            position = new Vector2(_cursor.Position.x + _groundMap.CellSize.x, _cursor.Position.y + _groundMap.CellSize.x);
         }
         else
         {
@@ -158,11 +156,11 @@ public class TestMap : LevelMap
         
         PlayerDeSelected();
 
-        var cursorIndex = new Vector2((position.x - _tileMap.CellSize.x / 2) / 16,
-            (position.y - _tileMap.CellSize.x / 2) / 16);
+        var cursorIndex = new Vector2((position.x - _groundMap.CellSize.x / 2) / 16,
+            (position.y - _groundMap.CellSize.x / 2) / 16);
         
-        if ((position.x - _tileMap.CellSize.x / 2) % _tileMap.CellSize.x == 0 
-            && (position.y - _tileMap.CellSize.x / 2) % _tileMap.CellSize.x == 0 
+        if ((position.x - _groundMap.CellSize.x / 2) % _groundMap.CellSize.x == 0 
+            && (position.y - _groundMap.CellSize.x / 2) % _groundMap.CellSize.x == 0 
             && cursorIndex.x >= 0 
             && cursorIndex.y >= 0 
             && cursorIndex.x < _inboundMatrix.GetLength(0) 
