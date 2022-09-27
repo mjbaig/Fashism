@@ -10,7 +10,8 @@ public class Aloo : Character
     {
         _characterStats = new CharacterStats()
         {
-            Move = 5
+            Move = 5,
+            AttackRange = 2,
         };
     }
 

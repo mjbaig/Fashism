@@ -202,7 +202,7 @@ public class TestMap : LevelMap
         _isSomethingSelected = false;
     }
 
-    private void PlayerSelected(Character character, Vector2 characterPosition)
+    private void ApplyMovementRange(Character character, Vector2 characterPosition)
     {
         Queue<Thing> queue = new Queue<Thing>();
 
@@ -210,6 +210,65 @@ public class TestMap : LevelMap
         {
             Position = characterPosition,
             StepsRemaining = character.GetCharacterStats().Move
+        });
+
+        int[][] directions =
+        {
+            new[] { 0, 1 },
+            new[] { 0, -1 },
+            new[] { 1, 0 },
+            new[] { -1, 0 }
+        };
+        
+        GD.Print(queue);
+
+        while (queue.Count != 0)
+        {
+            var thing = queue.Dequeue();
+            _selectMap.SetCell((int)thing.Position.x, (int)thing.Position.y, 0);
+
+            var stepsRemaining = thing.StepsRemaining - 1;
+
+            if (stepsRemaining > 0)
+            {
+                foreach (var direction in directions)
+                {
+                    var newX = (int)thing.Position.x + direction[0];
+                    var newY = (int)thing.Position.y + direction[1];
+                    
+                    GD.Print(newX, " ,",newY);
+                    
+                    GD.Print(_selectMap.GetCell(newX, newY) , _featureMap.GetCell(newX, newY));
+                    
+                    if (newX >= 0
+                        && newY >= 0
+                        && newX < _inboundMatrix.GetLength(0)
+                        && newY < _inboundMatrix.GetLength(1)
+                        && _inboundMatrix[newX, newY] == 1 
+                        && (_selectMap.GetCell(newX, newY) == -1 || _selectMap.GetCell(newX, newY) == 1 )
+                        && _featureMap.GetCell(newX, newY) == -1)
+                    {
+                        queue.Enqueue(new Thing()
+                        {
+                            Position = new Vector2(newX, newY),
+                            StepsRemaining = stepsRemaining
+                        });
+                    }
+                    
+                }
+            }
+
+        }
+    }
+
+    private void ApplyAttackRange(Character character, Vector2 characterPosition)
+    {
+        Queue<Thing> queue = new Queue<Thing>();
+
+        queue.Enqueue(new Thing()
+        {
+            Position = characterPosition,
+            StepsRemaining = character.GetCharacterStats().Move + character.GetCharacterStats().AttackRange
         });
 
         int[][] directions =
@@ -245,8 +304,7 @@ public class TestMap : LevelMap
                         && newX < _inboundMatrix.GetLength(0)
                         && newY < _inboundMatrix.GetLength(1)
                         && _inboundMatrix[newX, newY] == 1 
-                        && _selectMap.GetCell(newX, newY) == -1 
-                        && _featureMap.GetCell(newX, newY) == -1)
+                        && _selectMap.GetCell(newX, newY) == -1)
                     {
                         queue.Enqueue(new Thing()
                         {
@@ -259,7 +317,12 @@ public class TestMap : LevelMap
             }
 
         }
+    }
 
+    private void PlayerSelected(Character character, Vector2 characterPosition)
+    {
+        ApplyAttackRange(character, characterPosition);
+        ApplyMovementRange(character, characterPosition);
     }
 
     private class Thing

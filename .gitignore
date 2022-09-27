@@ -10,3 +10,4 @@ export_presets.cfg
 data_*/
 mono_crash*
 .idea/**
+.DS_Store

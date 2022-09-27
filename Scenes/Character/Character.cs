@@ -54,5 +54,6 @@ namespace Fashism.Scenes.Character
     public class CharacterStats
     {
         public int Move { get; set; }
+        public int AttackRange { get; set; }
     }
 }
